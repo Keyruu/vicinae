@@ -16,7 +16,7 @@ else()
 
 	FetchContent_Declare(numen
 	  GIT_REPOSITORY https://github.com/vicinaehq/numen
-	  GIT_TAG        v0.7.0
+	  GIT_TAG        v0.8.1
 	)
 
 	FetchContent_MakeAvailable(numen)
@@ -186,6 +186,8 @@ set(SRCS
 
 	src/actions/app-actions.hpp
 	src/actions/app-actions.cpp
+	src/actions/save-as-action.hpp
+	src/actions/save-as-action.cpp
 	
 	src/service-registry.cpp
 
@@ -906,7 +908,7 @@ list(APPEND SRCS
 	src/services/global-shortcuts/config-global-shortcuts.cpp
 )
 
-if (NOT WIN32)
+if (NOT WIN32 AND NOT APPLE)
 	list(APPEND LIBS qalculate)
 	list(APPEND SRCS
 		src/services/calculator-service/qalculate/qalculate-backend.hpp
@@ -1194,6 +1196,7 @@ set(VICINAE_QML_FILES
 	src/ui/qml/detail/DetailPanel.qml
 	src/ui/qml/detail/MetadataBar.qml
 	src/ui/qml/launcher/AlertDialog.qml
+	src/ui/qml/launcher/SaveFileFallback.qml
 	src/ui/qml/form/FormView.qml
 	src/ui/qml/form/FormField.qml
 	src/ui/qml/form/FormInputBackground.qml
@@ -1488,7 +1491,9 @@ if (BUILD_TESTS AND UNIX AND NOT APPLE)
 		src/services/builtin-icon/builtin-icon.hpp
 		src/services/builtin-icon/builtin-icon.cpp
 		src/services/audio-control/pactl/pactl-audio-control.cpp
+		src/services/clipboard/clipboard-mime.cpp
 		tests/pactl-audio-control.cpp
+		tests/clipboard-mime.cpp
 	)
 	target_link_libraries(${TEST_TARGET} PRIVATE vicinae::common Qt6::Concurrent glaze::glaze)
 	target_link_libraries(${TEST_TARGET} PRIVATE Catch2::Catch2WithMain Qt6::Core Qt6::Gui)
